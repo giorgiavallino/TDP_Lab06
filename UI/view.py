@@ -1,46 +1,52 @@
 import flet as ft
 
-
 class View(ft.UserControl):
+
     def __init__(self, page: ft.Page):
         super().__init__()
-        # page stuff
+        # Page stuff
         self._page = page
         self._page.title = "Template application using MVC and DAO"
         self._page.horizontal_alignment = 'CENTER'
-        self._page.theme_mode = ft.ThemeMode.DARK
-        # controller (it is not initialized. Must be initialized in the main, after the controller is created)
+        self._page.theme_mode = ft.ThemeMode.LIGHT
+        # Controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
-        # graphical elements
+        # Graphical elements
         self._title = None
-        self.txt_name = None
-        self.btn_hello = None
-        self.txt_result = None
-        self.txt_container = None
+        self.ddAnno = None
+        self.ddBrand = None
+        self.ddRetailer = None
+        self.btnTopVendite = None
+        self.btnAnalizzaVendite = None
+        self.lvTxtOut = None
 
     def load_interface(self):
-        # title
-        self._title = ft.Text("Hello World", color="blue", size=24)
+        # Title
+        self._title = ft.Text("Analizza vendite", color="blue", size=24)
         self._page.controls.append(self._title)
-
-        #ROW with some controls
-        # text field for the name
-        self.txt_name = ft.TextField(
-            label="name",
-            width=200,
-            hint_text="Insert a your name"
-        )
-
-        # button for the "hello" reply
-        self.btn_hello = ft.ElevatedButton(text="Hello", on_click=self._controller.handle_hello)
-        row1 = ft.Row([self.txt_name, self.btn_hello],
-                      alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
-
-        # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        # Altri elementi grafici
+        self.ddAnno = ft.Dropdown(label="Anno",
+                                  hint_text="Selezionare l'anno",
+                                  options=[ft.dropdown.Option("Nessun filtro")])
+        self._controller.fillDDAnno()
+        self.ddBrand = ft.Dropdown(label="Brand",
+                                   hint_text="Selezionare il brand",
+                                   options=[ft.dropdown.Option("Nessun filtro")])
+        self._controller.fillDDBrand()
+        self.ddRetailer = ft.Dropdown(label="Retailer",
+                                      hint_text="Selezionare il retailer",
+                                      options=[ft.dropdown.Option("Nessun filtro")])
+        self._controller.fillDDRetailer()
+        self.btnTopVendite = ft.ElevatedButton(text="Top vendite",
+                                               on_click=self._controller.searchTopVendite)
+        self.btnAnalizzaVendite = ft.ElevatedButton(text="Analizza vendite")
+        self.lvTxtOut = ft.ListView(expand=True)
+        row_01 = ft.Row([self.ddAnno, self.ddBrand, self.ddBrand],
+                        alignment=ft.MainAxisAlignment.CENTER)
+        row_02 = ft.Row([self.btnTopVendite, self.btnAnalizzaVendite],
+                        alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row_01, row_02, self.lvTxtOut)
+        self.update_page()
 
     @property
     def controller(self):
