@@ -29,4 +29,32 @@ class Controller:
                                                                     on_click=self._readRetailer))
 
     def _readRetailer(self, e):
-        self._ddRetailerValue = e.control.data
+        self._ddRetailerValue = e.control.data.retailer_code
+
+    def searchTopVendite(self, e):
+        self._view.lvTxtOut.controls.clear()
+        anno = self._view.ddAnno.value
+        if anno == None:
+            self._view.create_alert("Selezionare un'opzione del menù Anno!")
+            self._view.update_page()
+            return
+        elif anno == "Nessun filtro":
+            anno = None
+        brand = self._view.ddBrand.value
+        if brand is None:
+            self._view.create_alert("Selezionare un'opzione del menù Brand!")
+            self._view.update_page()
+            return
+        elif brand == "Nessun filtro":
+            brand = None
+        retailer = self._ddRetailerValue
+        if self._ddRetailerValue is None:
+            self._view.create_alert("Selezionare un'opzione del menù Retailer!")
+            self._view.update_page()
+            return
+        elif self._ddRetailerValue == "Nessun filtro":
+            self._ddRetailerValue = None
+        risultato = self._model.searchTopVendite(anno, brand, self._ddRetailerValue)
+        for elemento in risultato:
+            self._view.lvTxtOut.controls.append(ft.Text(f"{elemento}"))
+        self._view.update_page()

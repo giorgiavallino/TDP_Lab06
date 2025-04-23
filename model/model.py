@@ -13,3 +13,9 @@ class Model:
 
     def getRetailer(self):
         return DAO.getRetailer()
+
+    def searchTopVendite(self, anno, brand, retailer):
+        return DAO.searchTopVendite(anno, brand, retailer)
+
+    def getProductCode(self, brand):
+        pass
