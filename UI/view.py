@@ -37,12 +37,12 @@ class View(ft.UserControl):
         self._controller.fillDDBrand()
         self.ddRetailer = ft.Dropdown(label="Retailer",
                                       hint_text="Selezionare il retailer",
-                                      options=[ft.dropdown.Option("Nessun filtro")],
                                       width=500)
         self._controller.fillDDRetailer()
         self.btnTopVendite = ft.ElevatedButton(text="Top vendite",
                                                on_click=self._controller.searchTopVendite)
-        self.btnAnalizzaVendite = ft.ElevatedButton(text="Analizza vendite")
+        self.btnAnalizzaVendite = ft.ElevatedButton(text="Analizza vendite",
+                                                    on_click=self._controller.analizzaVendite)
         self.lvTxtOut = ft.ListView(expand=True)
         row_01 = ft.Row([self.ddAnno, self.ddBrand, self.ddRetailer],
                         alignment=ft.MainAxisAlignment.CENTER)

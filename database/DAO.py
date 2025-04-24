@@ -63,7 +63,7 @@ class DAO():
             return risultato
 
     @staticmethod
-    def searchTopVendite(anno, brand, retailer):
+    def searchVendite(anno, brand, retailer):
         cnx = DBConnect.get_connection()
         risultato = []
         if cnx is None:
@@ -84,5 +84,23 @@ class DAO():
             cnx.close()
             return risultato
 
-if __name__=="__main__":
-    print(DAO.searchTopVendite("2015", 103110, None))
+    @staticmethod
+    def getNumeroCoinvolti(anno, brand, retailer):
+        cnx = DBConnect.get_connection()
+        risultato = []
+        if cnx is None:
+            return risultato
+        else:
+            cursor = cnx.cursor()
+            query = """SELECT COUNT(DISTINCT(gds.Retailer_code)), COUNT(DISTINCT(gds.Product_number))
+                    FROM go_daily_sales gds,  go_products gp
+                    WHERE gds.Product_number = gp.Product_number
+                    AND YEAR(gds.Date) = COALESCE(%s, YEAR(gds.Date))
+                    AND gp.Product_brand = coalesce(%s, gp.Product_brand)
+                    AND gds.Retailer_code = coalesce(%s, gds.Retailer_code)"""
+            cursor.execute(query, (anno, brand, retailer,))
+            for row in cursor:
+                risultato.append(row)
+            cursor.close()
+            cnx.close()
+            return risultato
