@@ -1,5 +1,4 @@
 from database.DB_connect import DBConnect
-from model.products import Product
 from model.retailer import Retailer
 from model.sales import Sale
 
